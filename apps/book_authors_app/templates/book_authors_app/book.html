@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'book_authors_app/css/style.css'%}">
+    <title>Document</title>
+</head>
+
+<body class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>{{ this_book.title }}</h1>
+            </div>
+            <div class="w-100"></div>
+            <div class="col">
+                <h2>Id: {{ this_book.id }}</h2>
+            </div>
+            <div class="w-100"></div>
+            <div class="col">Description: {{ this_book.desc }}</div>
+            <div class="w-100"></div>
+            <div class="col">
+                <ul>Authors:
+                    {% for author in this_book.author.all %}
+                    <li>{{ author.first_name }} {{ author.last_name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col">
+                <form action="/new_author" method="POST">
+                    {% csrf_token %}
+                    <select name = "author_id" class="custom-select">
+                    <option selected value="-select an author-">-select an author-</option>
+                    {% for author in all_authors %}
+                        {% if author not in this_book.author.all %}
+                            <option name = "author_id" value="{{ author.id }}">{{ author.first_name }} {{ author.last_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

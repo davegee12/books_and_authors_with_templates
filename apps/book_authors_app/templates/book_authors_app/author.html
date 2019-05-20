@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'book_authors_app/css/style.css'%}">
+    <title>Document</title>
+</head>
+
+<body class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>{{ this_author.first_name }} {{ this_author.last_name }}</h1>
+            </div>
+            <div class="w-100"></div>
+            <div class="col">
+                <h2>Id: {{ this_author.id }}</h2>
+            </div>
+            <div class="w-100"></div>
+            <div class="col">Notes: {{ this_author.notes }}</div>
+            <div class="w-100"></div>
+            <div class="col">
+                <ul>Books:
+                    {% for book in this_author.books.all %}
+                    <li>{{ book.title }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col">
+                <form action="/new_book" method="POST">
+                    {% csrf_token %}
+                    <select name = "book_id" class="custom-select">
+                        <option selected value="-select an author-">-select a book-</option>
+                        {% for book in all_books %}
+                        {% if book not in this_author.books.all %}
+                        <option name = "book_id" value="{{ book.id }}">{{ book.title }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
